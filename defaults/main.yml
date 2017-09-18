@@ -1,0 +1,24 @@
+---
+image_name: quay.io/letsencrypt/letsencrypt
+image_version: latest
+
+email: ''
+
+keysize: 4096
+
+config_volume: /srv/docker/letsencrypt/config
+data_volume: /srv/docker/letsencrypt/data
+log_volume: /var/log/letsencrypt
+www_volume: /srv/docker/letsencrypt/www
+
+nginx_container_name: nginx.service
+
+script_path: /opt/letsencrypt
+renew_script_path: "{{script_path}}/renew.bash"
+create_cert_script_path: "{{script_path}}/create_cert.bash"
+renew_logfile: "{{log_volume}}/letsencrypt_renew.log"
+
+logrotate_config: /etc/logrotate.d/letsencrypt
+cron_job_config: /etc/cron.d/letsencrypt_renew
+
+domains: []

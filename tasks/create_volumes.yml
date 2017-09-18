@@ -1,0 +1,27 @@
+---
+- name: create config directory
+  file:
+    path: "{{config_volume}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 775
+  when: config_volume != ''
+
+- name: create data directory
+  file:
+    path: "{{data_volume}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 775
+  when: data_volume != ''
+
+- name: create log directory
+  file:
+    path: "{{log_volume}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 775
+  when: log_volume != ''

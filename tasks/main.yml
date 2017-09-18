@@ -1,0 +1,37 @@
+---
+- name: pull image
+  docker_image:
+    name: "{{image_name}}:{{image_version}}"
+
+- include: create_volumes.yml
+
+- name: Setup logrotate config
+  template:
+    src: logrotate.j2
+    dest: "{{logrotate_config}}"
+
+- name: Create script path
+  file:
+    path: "{{script_path}}"
+    state: directory
+    mode: 0755
+
+- name: Create renew script
+  template:
+    src: renew.bash.j2
+    dest: "{{renew_script_path}}"
+    mode: 0755
+
+- name: Create create_cert script
+  template:
+    src: create_cert.bash.j2
+    dest: "{{create_cert_script_path}}"
+    mode: 0755
+
+- name: Create cron job
+  template:
+    src: renew.cron.j2
+    dest: "{{cron_job_config}}"
+
+- include: create_certificate.yml site_name={{ item }}
+  with_items: "{{ domains }}"

@@ -1,0 +1,19 @@
+---
+- hosts: test_machine
+  become: yes
+
+  pre_tasks:
+  - apt:
+      name: python-docker
+      update_cache: yes
+
+  post_tasks:
+  - apt:
+      name: python-docker
+      state: absent
+      purge: yes
+
+  roles:
+    - role: '.'
+      email: XXXX@gmail.com
+      www_volume: /srv/docker/letsencrypt/www

@@ -1,0 +1,29 @@
+#!/bin/bash
+set -e
+
+EMAIL={{email}}
+
+LETSENCRYPT_IMAGE_VERSION={{image_version}}
+LETSENCRYPT_IMAGE="{{image_name}}:{{image_version}}"
+
+
+echo "******************"
+echo "*** $(date -R) ***"
+echo "Starting letsencrypt renew..."
+
+
+docker pull ${LETSENCRYPT_IMAGE}
+
+
+docker run -it --rm -a STDOUT --name letsencrypt \
+        -v "{{config_volume}}:/etc/letsencrypt" \
+        -v "{{data_volume}}:/var/lib/letsencrypt" \
+        -v "{{log_volume}}:/var/log/letsencrypt" \
+        -v "{{www_volume}}:/www" \
+        ${LETSENCRYPT_IMAGE} renew -a webroot --webroot-path=/www --email $EMAIL --agree-tos --rsa-key-size {{keysize}} $*
+
+docker exec {{nginx_container_name}} nginx -s reload
+
+echo "Letsencrypt renew finished."
+echo "*** $(date -R) ***"
+echo "******************"

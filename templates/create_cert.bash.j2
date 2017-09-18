@@ -1,0 +1,25 @@
+#!/bin/bash
+set -e
+
+if [ -z "$1" ]; then
+  echo "Correct usage: create_cert.sh DOMAIN"
+  exit 1
+fi
+
+DOMAIN=$1
+EMAIL={{email}}
+
+LETSENCRYPT_IMAGE="{{image_name}}:{{image_version}}"
+
+
+#mkdir -p /home/data/letsencrypt/config
+#mkdir -p /home/data/letsencrypt/data
+#mkdir -p /home/data/letsencrypt/log
+
+
+docker run --rm --name letsencrypt_create_cert \
+        -v "{{config_volume}}:/etc/letsencrypt" \
+        -v "{{data_volume}}:/var/lib/letsencrypt" \
+        -v "{{log_volume}}:/var/log/letsencrypt" \
+        -v "{{www_volume}}:/www" \
+        ${LETSENCRYPT_IMAGE} auth -a webroot --webroot-path=/www --email ${EMAIL} --agree-tos --rsa-key-size {{keysize}} -d ${DOMAIN}
