@@ -15,7 +15,7 @@ echo "Starting letsencrypt renew..."
 docker pull ${LETSENCRYPT_IMAGE}
 
 
-docker run -it --rm -a STDOUT --name letsencrypt \
+docker run --rm -a STDOUT --name letsencrypt \
         -v "{{config_volume}}:/etc/letsencrypt" \
         -v "{{data_volume}}:/var/lib/letsencrypt" \
         -v "{{log_volume}}:/var/log/letsencrypt" \
