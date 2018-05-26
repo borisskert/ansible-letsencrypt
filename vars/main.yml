@@ -1,0 +1,3 @@
+---
+renew_service_name: letsencrypt.renew
+nginx_reload_service_name: nginx.reload
