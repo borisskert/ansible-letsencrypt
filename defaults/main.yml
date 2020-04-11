@@ -1,5 +1,5 @@
 ---
-image_name: quay.io/letsencrypt/letsencrypt
+image_name: certbot/certbot
 image_version: latest
 
 email: ''

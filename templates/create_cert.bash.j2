@@ -15,4 +15,4 @@ docker run --rm --name letsencrypt_create_cert \
         -v "{{config_volume}}:/etc/letsencrypt" \
         -v "{{data_volume}}:/var/lib/letsencrypt" \
         -v "{{www_volume}}:/www" \
-        ${LETSENCRYPT_IMAGE} auth -a webroot --webroot-path=/www --email ${EMAIL} --agree-tos --rsa-key-size {{keysize}} -d ${DOMAIN}
+        ${LETSENCRYPT_IMAGE} auth -a webroot --webroot-path=/www --non-interactive --email ${EMAIL} --agree-tos --rsa-key-size {{keysize}} -d ${DOMAIN}

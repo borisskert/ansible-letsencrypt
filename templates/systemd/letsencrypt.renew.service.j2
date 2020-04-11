@@ -8,7 +8,7 @@ ExecStart = /usr/bin/docker run --rm --name letsencrypt \
                     -v "{{config_volume}}:/etc/letsencrypt" \
                     -v "{{data_volume}}:/var/lib/letsencrypt" \
                     -v "{{www_volume}}:/www" \
-                    {{image_name}}:{{image_version}} renew -a webroot --webroot-path=/www --email {{email}} --agree-tos --rsa-key-size {{keysize}}
+                    {{image_name}}:{{image_version}} renew -a webroot --webroot-path=/www --non-interactive --email {{email}} --agree-tos --rsa-key-size {{keysize}}
 
 ExecStopPost  = -/bin/systemctl start {{nginx_reload_service_name}}
 
