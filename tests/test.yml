@@ -15,4 +15,4 @@
         - my.domain.one
         - my.domain.two
         - my.domain.three
-      force_cert_creation: no
+      force_cert_creation: "{{force_cert_creation | default(true) | bool }}"

@@ -54,7 +54,7 @@
 
 - include: create_certificate.yml site_name={{ item }}
   with_items: "{{ domains }}"
-  when: force_cert_creation
+  when: force_cert_creation == true
 
 - name: Reload systemd
   command: systemctl daemon-reload
