@@ -23,7 +23,7 @@
     dest: "/etc/systemd/system/{{renew_service_name}}.service"
     owner: root
     group: root
-    mode: 0554
+    mode: 0644
   register: letsencrypt_renew_service
 
 - name: Setup renew service
@@ -38,7 +38,7 @@
     dest: "/etc/systemd/system/{{renew_service_name}}.timer"
     owner: root
     group: root
-    mode: 0554
+    mode: 0644
   register: letsencrypt_renew_timer
 
 - name: Setup renew timer
@@ -46,6 +46,11 @@
     name: "{{renew_service_name}}.timer"
     state: started
     enabled: yes
+
+- name: Setup logrotate config
+  template:
+    src: logrotate.j2
+    dest: "{{logrotate_config}}"
 
 - include: create_certificate.yml site_name={{ item }}
   with_items: "{{ domains }}"

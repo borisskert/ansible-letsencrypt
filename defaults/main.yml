@@ -16,3 +16,6 @@ create_cert_script_path: "{{script_path}}/create_cert.bash"
 domains: []
 
 force_cert_creation: yes
+
+logrotate_config: /etc/logrotate.d/letsencrypt
+log_folder: /var/log/letsencrypt
