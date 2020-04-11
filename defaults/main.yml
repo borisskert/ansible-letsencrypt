@@ -14,3 +14,5 @@ script_path: /opt/letsencrypt
 create_cert_script_path: "{{script_path}}/create_cert.bash"
 
 domains: []
+
+force_cert_creation: yes

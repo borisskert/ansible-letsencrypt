@@ -1,24 +1,21 @@
-ansible-letsencrypt
-===================
+# ansible-letsencrypt
 
 Installs letsencrypt as docker container.
 
-Requirements
-------------
+## Requirements
 
+* Python
 * Docker
-* Nginx
 
-Tasks
------
+## Tasks
 
 * Create volume paths for docker container
 * Create helper scripts
 * Setup cron job
 * Setup logrotate config
+* Create certificates (if not disabled)
 
-Role parameters
---------------
+## Role parameters
 
 | Variable      | Type | Mandatory? | Default | Description           |
 |---------------|------|------------|---------|-----------------------|
@@ -31,9 +28,9 @@ Role parameters
 | www_volume    | path as text | no | /srv/docker/letsencrypt/www     |                      |
 | script_path          | path as text | no | /opt/letsencrypt         |                      |
 | domains              | array of texts | no | []                     | list of your (sub-)domains you want to manage letsencrypt certificates |
+| force_cert_creation  | boolean        | no | yes                    | Try to create certificates instantly                                   |
 
-Example Playbook
-----------------
+## Example Playbook
 
 Usage (without parameters):
 

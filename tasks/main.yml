@@ -2,7 +2,7 @@
 - name: pull image
   docker_image:
     name: "{{image_name}}:{{image_version}}"
-
+    source: pull
 - include: create_volumes.yml
 
 - name: Create script path
@@ -11,7 +11,7 @@
     state: directory
     mode: 0755
 
-- name: Create create_cert script
+- name: Template create_cert script
   template:
     src: create_cert.bash.j2
     dest: "{{create_cert_script_path}}"
@@ -49,6 +49,7 @@
 
 - include: create_certificate.yml site_name={{ item }}
   with_items: "{{ domains }}"
+  when: force_cert_creation
 
 - name: Reload systemd
   command: systemctl daemon-reload
