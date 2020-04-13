@@ -10,7 +10,7 @@
 
     - role: ansible-letsencrypt
       email: XXXX@gmail.com
-      www_volume: /srv/docker/letsencrypt/www
+      volume: /srv/docker/letsencrypt
       domains:
         - my.domain.one
         - my.domain.two

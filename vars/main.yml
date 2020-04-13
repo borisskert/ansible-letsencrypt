@@ -1,3 +1,11 @@
 ---
 renew_service_name: letsencrypt.renew
 nginx_reload_service_name: nginx.reload
+
+config_volume: "{{volume}}/config"
+data_volume: "{{volume}}/data"
+
+create_cert_script_path: "{{working_directory}}/create_cert.bash"
+
+logrotate_config: /etc/logrotate.d/letsencrypt
+log_folder: /var/log/letsencrypt

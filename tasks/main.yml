@@ -5,9 +5,9 @@
     source: pull
 - include: create_volumes.yml
 
-- name: Create script path
+- name: Create working directory
   file:
-    path: "{{script_path}}"
+    path: "{{working_directory}}"
     state: directory
     mode: 0755
 

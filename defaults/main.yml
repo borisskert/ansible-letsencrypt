@@ -6,16 +6,10 @@ email: ''
 
 keysize: 4096
 
-config_volume: /srv/docker/letsencrypt/config
-data_volume: /srv/docker/letsencrypt/data
-www_volume: /srv/docker/letsencrypt/www
-
-script_path: /opt/letsencrypt
-create_cert_script_path: "{{script_path}}/create_cert.bash"
+volume: /srv/docker/letsencrypt
+working_directory: /opt/letsencrypt
+www_volume: "{{volume}}/www"
 
 domains: []
 
 force_cert_creation: yes
-
-logrotate_config: /etc/logrotate.d/letsencrypt
-log_folder: /var/log/letsencrypt
