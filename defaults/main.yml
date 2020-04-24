@@ -6,9 +6,12 @@ email: ''
 
 keysize: 4096
 
-volume: /srv/docker/letsencrypt
 working_directory: /opt/letsencrypt
+volume: ''
 www_volume: "{{volume}}/www"
+config_volume: "{{volume}}/config"
+data_volume: "{{volume}}/data"
+log_folder: /var/log/letsencrypt
 
 domains: []
 

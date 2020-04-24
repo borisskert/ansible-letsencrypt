@@ -12,7 +12,6 @@ Installs letsencrypt as docker container.
 * Create volume paths for docker container
 * Create helper scripts
 * Setup cron job
-* Setup logrotate config
 * Create certificates (if not disabled)
 
 ## Role parameters
@@ -23,9 +22,10 @@ Installs letsencrypt as docker container.
 | image_version | text | no         | latest                          | Docker image version |
 | email         | text | yes        |                                 | Your e-mail address  |
 | keysize       | text | no         | 4096                            |                      |
-| config_volume | path as text | no | /srv/docker/letsencrypt/config  |                      |
-| data_volume   | path as text | no | /srv/docker/letsencrypt/data    |                      |
-| www_volume    | path as text | no | /srv/docker/letsencrypt/www     |                      |
+| config_volume | path as text | no  | {{volume}}/config |                      |
+| data_volume   | path as text | no  | {{volume}}/data   |                      |
+| www_volume    | path as text | no  | {{volume}}/www    |                      |
+| log_folder    | path as text | no  | /var/log/letsencrypt |                   |
 | script_path          | path as text | no | /opt/letsencrypt         |                      |
 | domains              | array of texts | no | []                     | list of your (sub-)domains you want to manage letsencrypt certificates |
 | force_cert_creation  | boolean        | no | yes                    | Try to create certificates instantly                                   |

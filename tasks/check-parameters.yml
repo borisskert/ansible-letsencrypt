@@ -1,0 +1,42 @@
+---
+- name: Check 'working_directory' parameter
+  assert:
+    that:
+      - "working_directory is defined"
+      - "working_directory | length > 0"
+    fail_msg: "parameter 'working_directory' is missing"
+
+- name: Check 'volume' parameter
+  assert:
+    that:
+      - "volume is defined"
+      - "volume | length > 0"
+    fail_msg: "parameter 'volume' is missing"
+
+- name: Check 'www_volume' parameter
+  assert:
+    that:
+      - "www_volume is defined"
+      - "www_volume | length > 0"
+    fail_msg: "parameter 'www_volume' is missing"
+
+- name: Check 'config_volume' parameter
+  assert:
+    that:
+      - "config_volume is defined"
+      - "config_volume | length > 0"
+    fail_msg: "parameter 'config_volume' is missing"
+
+- name: Check 'data_volume' parameter
+  assert:
+    that:
+      - "data_volume is defined"
+      - "data_volume | length > 0"
+    fail_msg: "parameter 'data_volume' is missing"
+
+- name: Check 'log_folder' parameter
+  assert:
+    that:
+      - "log_folder is defined"
+      - "log_folder | length > 0"
+    fail_msg: "parameter 'log_folder' is missing"

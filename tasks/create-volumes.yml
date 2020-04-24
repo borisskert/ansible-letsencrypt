@@ -5,8 +5,7 @@
     state: directory
     owner: root
     group: root
-    mode: 775
-  when: config_volume != ''
+    mode: 0755
 
 - name: create data directory
   file:
@@ -14,5 +13,12 @@
     state: directory
     owner: root
     group: root
-    mode: 775
-  when: data_volume != ''
+    mode: 0755
+
+- name: create log directory
+  file:
+    path: "{{log_folder}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755

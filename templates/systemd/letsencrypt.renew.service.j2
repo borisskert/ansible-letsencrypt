@@ -5,10 +5,17 @@ Description = letsencrypt certificate renew service
 ExecStartPre = -/usr/bin/docker pull {{image_name}}:{{image_version}}
 
 ExecStart = /usr/bin/docker run --rm --name letsencrypt \
-                    -v "{{config_volume}}:/etc/letsencrypt" \
-                    -v "{{data_volume}}:/var/lib/letsencrypt" \
-                    -v "{{www_volume}}:/www" \
-                    {{image_name}}:{{image_version}} renew -a webroot --webroot-path=/www --non-interactive --email {{email}} --agree-tos --rsa-key-size {{keysize}}
+              --volume "{{config_volume}}:/etc/letsencrypt" \
+              --volume "{{data_volume}}:/var/lib/letsencrypt" \
+              --volume "{{www_volume}}:/www" \
+              --volume "{{log_folder}}:/var/log/letsencrypt" \
+              {{image_name}}:{{image_version}} \
+              renew -a webroot \
+                    --webroot-path=/www \
+                    --non-interactive \
+                    --email {{email}} \
+                    --agree-tos \
+                    --rsa-key-size {{keysize}}
 
 ExecStopPost  = -/bin/systemctl start {{nginx_reload_service_name}}
 

@@ -1,9 +1,12 @@
 ---
-- name: pull image
+- include: check-parameters.yml
+
+- name: Pull image
   docker_image:
     name: "{{image_name}}:{{image_version}}"
     source: pull
-- include: create_volumes.yml
+
+- include: create-volumes.yml
 
 - name: Create working directory
   file:
@@ -47,6 +50,11 @@
     state: started
     enabled: yes
 
+- name: Reload systemd
+  command: systemctl daemon-reload
+  when: letsencrypt_renew_service.changed
+    or letsencrypt_renew_timer.changed
+
 - name: Setup logrotate config
   template:
     src: logrotate.j2
@@ -54,8 +62,4 @@
 
 - include: create_certificate.yml site_name={{ item }}
   with_items: "{{ domains }}"
-  when: force_cert_creation == true
-
-- name: Reload systemd
-  command: systemctl daemon-reload
-  when: letsencrypt_renew_service.changed or letsencrypt_renew_timer.changed
+  when: force_cert_creation | bool

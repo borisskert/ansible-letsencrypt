@@ -12,7 +12,15 @@ EMAIL={{email}}
 LETSENCRYPT_IMAGE="{{image_name}}:{{image_version}}"
 
 docker run --rm --name letsencrypt_create_cert \
-        -v "{{config_volume}}:/etc/letsencrypt" \
-        -v "{{data_volume}}:/var/lib/letsencrypt" \
-        -v "{{www_volume}}:/www" \
-        ${LETSENCRYPT_IMAGE} auth -a webroot --webroot-path=/www --non-interactive --email ${EMAIL} --agree-tos --rsa-key-size {{keysize}} -d ${DOMAIN}
+        --volume "{{config_volume}}:/etc/letsencrypt" \
+        --volume "{{data_volume}}:/var/lib/letsencrypt" \
+        --volume "{{www_volume}}:/www" \
+        --volume "{{log_folder}}:/var/log/letsencrypt" \
+        ${LETSENCRYPT_IMAGE} auth \
+                             -a webroot \
+                             --webroot-path=/www \
+                             --non-interactive \
+                             --email ${EMAIL} \
+                             --agree-tos \
+                             --rsa-key-size {{keysize}} \
+                             -d ${DOMAIN}
