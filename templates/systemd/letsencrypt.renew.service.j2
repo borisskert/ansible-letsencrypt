@@ -13,4 +13,4 @@ ExecStart = /usr/bin/docker run --rm --name letsencrypt \
 ExecStopPost  = -/bin/systemctl start {{nginx_reload_service_name}}
 
 Restart = no
-TimeoutSec = 60
+TimeoutSec = 3600

@@ -32,16 +32,33 @@ Installs letsencrypt as docker container.
 
 ## Example Playbook
 
-Usage (without parameters):
+### Add to `requirements.yml`:
 
+```yaml
+- name: install-letsencrypt
+  src: https://github.com/borisskert/ansible-letsencrypt.git
+  scm: git
+```
+
+Minimal playbook:
+
+```yaml
     - hosts: servers
       roles:
-      - install-docker-letsencrypt
+      - install-letsencrypt
+```
 
-Usage (with parameters):
+Typical playbook:
 
-    - hosts: servers
-      roles:
-      - role: install-docker-letsencrypt
-        email: XXXX@gmail.com
-        www_volume: /srv/docker/letsencrypt/www
+```yaml
+    - role: install-letsencrypt
+      email: XXXX@gmail.com
+      keysize: 4096
+      www_volume: /srv/nginx/www
+      volume: /srv/letsencrypt
+      working_directory: /opt/letsencrypt
+      domains:
+        - git.myserver.org
+        - wiki.myserver.org
+      force_cert_creation: yes
+```
