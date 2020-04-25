@@ -1,2 +1,9 @@
+[Unit]
+Description=Run daily letsencrypt renew
+
 [Timer]
 OnCalendar = daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target

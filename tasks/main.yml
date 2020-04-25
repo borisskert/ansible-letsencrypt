@@ -29,12 +29,6 @@
     mode: 0644
   register: letsencrypt_renew_service
 
-- name: Setup renew service
-  systemd:
-    name: "{{renew_service_name}}.service"
-    state: stopped
-    enabled: yes
-
 - name: Create renew timer
   template:
     src: systemd/letsencrypt.renew.timer.j2
@@ -44,16 +38,21 @@
     mode: 0644
   register: letsencrypt_renew_timer
 
+- name: Reload systemd
+  command: systemctl daemon-reload
+  when: letsencrypt_renew_service.changed
+    or letsencrypt_renew_timer.changed
+
+- name: Setup renew service
+  systemd:
+    name: "{{renew_service_name}}.service"
+    enabled: yes
+
 - name: Setup renew timer
   systemd:
     name: "{{renew_service_name}}.timer"
     state: started
     enabled: yes
-
-- name: Reload systemd
-  command: systemctl daemon-reload
-  when: letsencrypt_renew_service.changed
-    or letsencrypt_renew_timer.changed
 
 - name: Setup logrotate config
   template:
