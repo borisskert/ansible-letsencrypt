@@ -15,7 +15,7 @@ log_folder: /var/log/letsencrypt
 
 domains: []
 
-force_cert_creation: yes
+force_cert_creation: true
 
 
 renew_service_name: letsencrypt.renew

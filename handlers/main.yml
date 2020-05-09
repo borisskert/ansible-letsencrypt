@@ -1,0 +1,9 @@
+---
+- name: Reload systemd
+  systemd:
+    daemon_reload: true
+
+- name: Start renew timer
+  systemd:
+    name: "{{ renew_service_name }}.timer"
+    state: started

@@ -1,12 +1,12 @@
 ---
 - hosts: test_machine
-  become: yes
+  become: true
 
   roles:
     - role: install-docker
       storage_driver: overlay2
-      cleanup_enabled: no
-      install_pip_docker: yes
+      cleanup_enabled: false
+      install_pip_docker: true
 
     - role: ansible-letsencrypt
       email: XXXX@gmail.com
@@ -15,4 +15,4 @@
         - my.domain.one
         - my.domain.two
         - my.domain.three
-      force_cert_creation: "{{force_cert_creation | default(true) | bool }}"
+      force_cert_creation: "{{ force_cert_creation | default(true) | bool }}"

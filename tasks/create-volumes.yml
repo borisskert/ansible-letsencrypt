@@ -1,24 +1,24 @@
 ---
 - name: create config directory
   file:
-    path: "{{config_volume}}"
+    path: "{{ config_volume }}"
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: 0750
 
 - name: create data directory
   file:
-    path: "{{data_volume}}"
+    path: "{{ data_volume }}"
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: 0750
 
 - name: create log directory
   file:
-    path: "{{log_folder}}"
+    path: "{{ log_folder }}"
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: 0750

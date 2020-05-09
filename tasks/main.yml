@@ -3,62 +3,62 @@
 
 - name: Pull image
   docker_image:
-    name: "{{image_name}}:{{image_version}}"
+    name: "{{ image_name }}:{{ image_version }}"
     source: pull
 
 - include: create-volumes.yml
 
 - name: Create working directory
   file:
-    path: "{{working_directory}}"
+    path: "{{ working_directory }}"
     state: directory
     mode: 0755
 
 - name: Template create_cert script
   template:
     src: create_cert.bash.j2
-    dest: "{{create_cert_script_path}}"
+    dest: "{{ create_cert_script_path }}"
     mode: 0755
 
 - name: Create renew service
   template:
     src: systemd/letsencrypt.renew.service.j2
-    dest: "/etc/systemd/system/{{renew_service_name}}.service"
+    dest: "/etc/systemd/system/{{ renew_service_name }}.service"
     owner: root
     group: root
     mode: 0644
   register: letsencrypt_renew_service
+  notify: Reload systemd
 
 - name: Create renew timer
   template:
     src: systemd/letsencrypt.renew.timer.j2
-    dest: "/etc/systemd/system/{{renew_service_name}}.timer"
+    dest: "/etc/systemd/system/{{ renew_service_name }}.timer"
     owner: root
     group: root
     mode: 0644
   register: letsencrypt_renew_timer
+  notify: Reload systemd
 
-- name: Reload systemd
-  command: systemctl daemon-reload
-  when: letsencrypt_renew_service.changed
-    or letsencrypt_renew_timer.changed
-
-- name: Setup renew service
+- name: Enable renew service
   systemd:
-    name: "{{renew_service_name}}.service"
-    enabled: yes
+    name: "{{ renew_service_name }}.service"
+    enabled: true
 
-- name: Setup renew timer
+- name: Enable renew timer
   systemd:
-    name: "{{renew_service_name}}.timer"
-    state: started
-    enabled: yes
+    name: "{{ renew_service_name }}.timer"
+    enabled: true
+  notify: Start renew timer
 
 - name: Setup logrotate config
   template:
     src: logrotate.j2
-    dest: "{{logrotate_config}}"
+    dest: "{{ logrotate_config }}"
 
-- include: create_certificate.yml site_name={{ item }}
+- include: create-certificate.yml site_name={{ item }}
   with_items: "{{ domains }}"
   when: force_cert_creation | bool
+
+- name: Start systemd-managed services/timers
+  meta: flush_handlers

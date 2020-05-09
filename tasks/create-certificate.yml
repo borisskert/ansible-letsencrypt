@@ -1,9 +1,9 @@
 ---
 - name: check certificate existence
   stat:
-    path: "{{config_volume}}/live/{{site_name}}"
+    path: "{{ config_volume }}/live/{{ site_name }}"
   register: certificate
 
 - name: Create certificate
-  command: "{{create_cert_script_path}} {{site_name}}"
+  command: "{{ create_cert_script_path }} {{ site_name }}"
   when: not(certificate.stat.exists)
