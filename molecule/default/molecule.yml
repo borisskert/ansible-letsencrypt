@@ -1,0 +1,46 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: ./molecule/shared/requirements.yml
+
+lint: |
+  set -e
+  yamllint . --strict
+  ansible-lint
+
+driver:
+  name: docker
+
+platforms:
+  - name: ansible-letsencrypt-ubuntu
+    image: docker.io/pycontribs/ubuntu
+    pre_build_image: true
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    groups:
+      - docker
+  - name: ansible-letsencrypt-debian
+    image: docker.io/pycontribs/debian
+    pre_build_image: true
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    groups:
+      - docker
+
+provisioner:
+  name: ansible
+  playbooks:
+    prepare: ../shared/prepare.yml
+    converge: ../shared/converge.yml
+    verify: ../shared/verify.yml
+  inventory:
+    group_vars:
+      docker:
+        molecule_docker_environment: true
+    host_vars:
+      ansible-letsencrypt-debian:
+        ansible_python_interpreter: /usr/bin/python3
+
+verifier:
+  name: ansible

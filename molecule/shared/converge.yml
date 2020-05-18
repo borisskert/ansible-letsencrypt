@@ -1,0 +1,14 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  roles:
+    - role: ansible-letsencrypt
+      email: XXXX@gmail.com
+      volume: /srv/letsencrypt
+      domains:
+        - my.domain.one
+        - my.domain.two
+        - my.domain.three
+      force_cert_creation: false

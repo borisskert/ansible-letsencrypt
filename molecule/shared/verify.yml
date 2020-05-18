@@ -1,0 +1,26 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Should have pulled image
+      docker_image:
+        name: certbot/certbot:latest
+        source: pull
+      register: docker_image
+      failed_when: docker_image.changed
+
+    - name: Should have created volume
+      file:
+        path: /srv/letsencrypt
+        state: directory
+      register: volume
+      failed_when: volume.changed
+
+  post_tasks:
+    - name: Delete docker image
+      docker_image:
+        name: certbot/certbot:latest
+        state: absent
+      failed_when: false

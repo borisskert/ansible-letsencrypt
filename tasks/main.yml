@@ -44,12 +44,20 @@
   systemd:
     name: "{{ renew_service_name }}.service"
     enabled: true
+  when: not (
+    molecule_docker_environment is defined
+    and molecule_docker_environment | bool
+    )
 
 - name: Enable renew timer
   systemd:
     name: "{{ renew_service_name }}.timer"
     enabled: true
   notify: Start renew timer
+  when: not (
+    molecule_docker_environment is defined
+    and molecule_docker_environment | bool
+    )
 
 - name: Setup logrotate config
   template:
