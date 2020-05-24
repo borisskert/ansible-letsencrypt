@@ -14,12 +14,6 @@
     state: directory
     mode: 0755
 
-- name: Template create_cert script
-  template:
-    src: create_cert.bash.j2
-    dest: "{{ create_cert_script_path }}"
-    mode: 0755
-
 - name: Create renew service
   template:
     src: systemd/letsencrypt.renew.service.j2
@@ -65,7 +59,7 @@
     dest: "{{ logrotate_config }}"
 
 - include: create-certificate.yml site_name={{ item }}
-  with_items: "{{ domains }}"
+  with_items: "{{ sites }}"
   when: force_cert_creation | bool
 
 - name: Start systemd-managed services/timers

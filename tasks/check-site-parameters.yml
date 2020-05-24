@@ -1,0 +1,29 @@
+---
+- name: Check 'site' object
+  assert:
+    that:
+      - "item is defined"
+    fail_msg: "'site' object is not defined"
+
+- name: Check 'site.domain' parameter
+  assert:
+    that:
+      - "item.domain is defined"
+      - "item.domain | length > 0"
+    fail_msg: "parameter 'site.domain' is missing"
+
+- name: Check 'site.test_cert' parameter
+  assert:
+    that:
+      - "item.test_cert is not defined or not item.test_cert | bool"
+    fail_msg: "parameter 'site.test_cert' is invalid"
+  when: item.dry_run is defined
+    and item.dry_run | bool
+
+- name: Check 'site.dry_run' parameter
+  assert:
+    that:
+      - "item.dry_run is not defined or not item.dry_run | bool"
+    fail_msg: "parameter 'site.dry_run' is invalid"
+  when: item.test_cert is defined
+    and item.test_cert | bool

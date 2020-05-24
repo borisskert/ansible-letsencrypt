@@ -10,16 +10,20 @@ driver:
     name: virtualbox
 
 platforms:
-  - name: ansible-letsencrypt-xenial
+  - name: ansible-borgbackup-xenial
     box: ubuntu/xenial64
-  - name: ansible-letsencrypt-bionic
+  - name: ansible-borgbackup-bionic
     box: ubuntu/bionic64
-  - name: ansible-letsencrypt-focal
+  - name: ansible-borgbackup-focal
     box: ubuntu/focal64
-  - name: ansible-letsencrypt-stretch
+  - name: ansible-borgbackup-stretch
     box: debian/stretch64
-  - name: ansible-letsencrypt-buster
+    groups:
+      - debian
+  - name: ansible-borgbackup-buster
     box: debian/buster64
+    groups:
+      - debian
 
 provisioner:
   name: ansible
@@ -28,10 +32,8 @@ provisioner:
     converge: ../shared/converge.yml
     verify: ../shared/verify.yml
   inventory:
-    host_vars:
-      ansible-letsencrypt-stretch:
-        ansible_python_interpreter: /usr/bin/python3
-      ansible-letsencrypt-buster:
+    group_vars:
+      debian:
         ansible_python_interpreter: /usr/bin/python3
 
 verifier:

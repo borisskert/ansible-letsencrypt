@@ -27,8 +27,17 @@ Installs letsencrypt as docker container.
 | www_volume    | path as text | no  | {{volume}}/www    |                      |
 | log_folder    | path as text | no  | /var/log/letsencrypt |                   |
 | script_path          | path as text | no | /opt/letsencrypt         |                      |
-| domains              | array of texts | no | []                     | list of your (sub-)domains you want to manage letsencrypt certificates |
-| force_cert_creation  | boolean        | no | yes                    | Try to create certificates instantly                                   |
+| sites                | array of `site` | no | []                     | list of your (sub-)domains you want to manage letsencrypt certificates |
+| force_cert_creation  | boolean         | no | yes                    | Try to create certificates instantly                                   |
+
+### Definition of `site`
+
+| Property      | Type | Mandatory? | Default | Description           |
+|---------------|------|------------|---------|-----------------------|
+| domain        | text | yes |      | Defines the domain of the site  |
+| dry_run       | boolean | no  |   | Use `--dry-run` switch          |
+| test_cert     | boolean | no  |   | use `--test-cert` switch        |
+| ignore        | boolean | no  |   | Disable this site               |
 
 ## Example Playbook
 
@@ -57,8 +66,11 @@ Typical playbook:
       www_volume: /srv/nginx/www
       volume: /srv/letsencrypt
       working_directory: /opt/letsencrypt
-      domains:
-        - git.myserver.org
-        - wiki.myserver.org
-      force_cert_creation: yes
+      sites:
+        - domain: git.myserver.org
+        - domain: wiki.myserver.org
+          dry_run: true
+          test_cert: false
+          ignore: true
+      force_cert_creation: true
 ```

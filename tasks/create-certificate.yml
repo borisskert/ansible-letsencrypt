@@ -1,9 +1,91 @@
 ---
 - name: check certificate existence
   stat:
-    path: "{{ config_volume }}/live/{{ site_name }}"
+    path: "{{ config_volume }}/live/{{ item.domain }}"
   register: certificate
 
-- name: Create certificate
-  command: "{{ create_cert_script_path }} {{ site_name }}"
-  when: not(certificate.stat.exists)
+- name: Create production certificate
+  command: |
+    docker run --rm --name letsencrypt_create_cert \
+      --volume "{{ config_volume }}:/etc/letsencrypt" \
+      --volume "{{ data_volume }}:/var/lib/letsencrypt" \
+      --volume "{{ www_volume }}:/www" \
+      --volume "{{ log_folder }}:/var/log/letsencrypt" \
+      {{ image_name }}:{{ image_version }} \
+        auth \
+        -a webroot \
+        --webroot-path=/www \
+        --non-interactive \
+        --email {{ email }} \
+        --agree-tos \
+        --rsa-key-size {{ keysize }} \
+        -d {{ item.domain }}
+  when: not certificate.stat.exists
+    and not (
+    item.dry_run is defined
+    and item.dry_run | bool
+    ) and not (
+    item.test_cert is defined
+    and item.test_cert | bool
+    ) and not (
+    item.ignore is defined
+    and item.ignore | bool
+    )
+
+- name: Create test certificate
+  command: |
+    docker run --rm --name letsencrypt_create_cert \
+      --volume "{{ config_volume }}:/etc/letsencrypt" \
+      --volume "{{ data_volume }}:/var/lib/letsencrypt" \
+      --volume "{{ www_volume }}:/www" \
+      --volume "{{ log_folder }}:/var/log/letsencrypt" \
+      {{ image_name }}:{{ image_version }} \
+        auth \
+        -a webroot \
+        --webroot-path=/www \
+        --non-interactive \
+        --email {{ email }} \
+        --agree-tos \
+        --rsa-key-size {{ keysize }} \
+        --test-cert \
+        -d {{ item.domain }}
+  when: not certificate.stat.exists
+    and not (
+    item.dry_run is defined
+    and item.dry_run | bool
+    ) and (
+    item.test_cert is defined
+    and item.test_cert | bool
+    ) and not (
+    item.ignore is defined
+    and item.ignore | bool
+    )
+
+- name: Create dry-run certificate
+  command: |
+    docker run --rm --name letsencrypt_create_cert \
+      --volume "{{ config_volume }}:/etc/letsencrypt" \
+      --volume "{{ data_volume }}:/var/lib/letsencrypt" \
+      --volume "{{ www_volume }}:/www" \
+      --volume "{{ log_folder }}:/var/log/letsencrypt" \
+      {{ image_name }}:{{ image_version }} \
+        certonly \
+        -a webroot \
+        --webroot-path=/www \
+        --non-interactive \
+        --email {{ email }} \
+        --agree-tos \
+        --rsa-key-size {{ keysize }} \
+        --dry-run \
+        -d {{ item.domain }}
+  when: not certificate.stat.exists
+    and (
+    item.dry_run is defined
+    and item.dry_run | bool
+    ) and not (
+    item.test_cert is defined
+    and item.test_cert | bool
+    ) and not (
+    item.ignore is defined
+    and item.ignore | bool
+    )

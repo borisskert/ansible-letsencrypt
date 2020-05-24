@@ -40,3 +40,7 @@
       - "log_folder is defined"
       - "log_folder | length > 0"
     fail_msg: "parameter 'log_folder' is missing"
+
+- name: Check site parameter
+  include: check-site-parameters.yml
+  with_items: "{{ sites }}"

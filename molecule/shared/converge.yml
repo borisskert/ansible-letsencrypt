@@ -7,8 +7,9 @@
     - role: ansible-letsencrypt
       email: XXXX@gmail.com
       volume: /srv/letsencrypt
-      domains:
-        - my.domain.one
-        - my.domain.two
-        - my.domain.three
-      force_cert_creation: false
+      sites:
+        - domain: my.domain.one
+          dry_run: true
+          test_cert: false
+          ignore: true
+      force_cert_creation: true
