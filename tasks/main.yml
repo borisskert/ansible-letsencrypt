@@ -22,7 +22,8 @@
     group: root
     mode: 0644
   register: letsencrypt_renew_service
-  notify: Reload systemd
+  notify:
+    - Enable renew service
 
 - name: Create renew timer
   template:
@@ -32,26 +33,9 @@
     group: root
     mode: 0644
   register: letsencrypt_renew_timer
-  notify: Reload systemd
-
-- name: Enable renew service
-  systemd:
-    name: "{{ renew_service_name }}.service"
-    enabled: true
-  when: not (
-    molecule_docker_environment is defined
-    and molecule_docker_environment | bool
-    )
-
-- name: Enable renew timer
-  systemd:
-    name: "{{ renew_service_name }}.timer"
-    enabled: true
-  notify: Start renew timer
-  when: not (
-    molecule_docker_environment is defined
-    and molecule_docker_environment | bool
-    )
+  notify:
+    - Enable renew timer
+    - Start renew timer
 
 - name: Setup logrotate config
   template:
@@ -64,3 +48,22 @@
 
 - name: Start systemd-managed services/timers
   meta: flush_handlers
+
+- name: Enable renew service (if not enabled)
+  systemd:
+    name: "{{ renew_service_name }}.service"
+    enabled: true
+  when: not (
+    molecule_docker_environment is defined
+    and molecule_docker_environment | bool
+    )
+
+- name: Enable and start renew timer (if not enabled and started)
+  systemd:
+    name: "{{ renew_service_name }}.timer"
+    enabled: true
+    state: started
+  when: not (
+    molecule_docker_environment is defined
+    and molecule_docker_environment | bool
+    )
