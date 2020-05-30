@@ -1,46 +1,46 @@
 ---
-- name: Check 'working_directory' parameter
+- name: Check 'letsencrypt_working_directory' parameter
   assert:
     that:
-      - "working_directory is defined"
-      - "working_directory | length > 0"
-    fail_msg: "parameter 'working_directory' is missing"
+      - "letsencrypt_working_directory is defined"
+      - "letsencrypt_working_directory | length > 0"
+    fail_msg: "parameter 'letsencrypt_working_directory' is missing"
 
-- name: Check 'volume' parameter
+- name: Check 'letsencrypt_volume' parameter
   assert:
     that:
-      - "volume is defined"
-      - "volume | length > 0"
-    fail_msg: "parameter 'volume' is missing"
+      - "letsencrypt_volume is defined"
+      - "letsencrypt_volume | length > 0"
+    fail_msg: "parameter 'letsencrypt_volume' is missing"
 
-- name: Check 'www_volume' parameter
+- name: Check 'letsencrypt_www_volume' parameter
   assert:
     that:
-      - "www_volume is defined"
-      - "www_volume | length > 0"
-    fail_msg: "parameter 'www_volume' is missing"
+      - "letsencrypt_www_volume is defined"
+      - "letsencrypt_www_volume | length > 0"
+    fail_msg: "parameter 'letsencrypt_www_volume' is missing"
 
-- name: Check 'config_volume' parameter
+- name: Check 'letsencrypt_config_volume' parameter
   assert:
     that:
-      - "config_volume is defined"
-      - "config_volume | length > 0"
-    fail_msg: "parameter 'config_volume' is missing"
+      - "letsencrypt_config_volume is defined"
+      - "letsencrypt_config_volume | length > 0"
+    fail_msg: "parameter 'letsencrypt_config_volume' is missing"
 
-- name: Check 'data_volume' parameter
+- name: Check 'letsencrypt_data_volume' parameter
   assert:
     that:
-      - "data_volume is defined"
-      - "data_volume | length > 0"
-    fail_msg: "parameter 'data_volume' is missing"
+      - "letsencrypt_data_volume is defined"
+      - "letsencrypt_data_volume | length > 0"
+    fail_msg: "parameter 'letsencrypt_data_volume' is missing"
 
-- name: Check 'log_folder' parameter
+- name: Check 'letsencrypt_log_folder' parameter
   assert:
     that:
-      - "log_folder is defined"
-      - "log_folder | length > 0"
-    fail_msg: "parameter 'log_folder' is missing"
+      - "letsencrypt_log_folder is defined"
+      - "letsencrypt_log_folder | length > 0"
+    fail_msg: "parameter 'letsencrypt_log_folder' is missing"
 
 - name: Check site parameter
   include: check-site-parameters.yml
-  with_items: "{{ sites }}"
+  with_items: "{{ letsencrypt_sites }}"

@@ -18,17 +18,16 @@ Installs letsencrypt as docker container.
 
 | Variable      | Type | Mandatory? | Default | Description           |
 |---------------|------|------------|---------|-----------------------|
-| image_name    | text | no         | quay.io/letsencrypt/letsencrypt | Docker image name    |
-| image_version | text | no         | latest                          | Docker image version |
-| email         | text | yes        |                                 | Your e-mail address  |
-| keysize       | text | no         | 4096                            |                      |
-| config_volume | path as text | no  | {{volume}}/config |                      |
-| data_volume   | path as text | no  | {{volume}}/data   |                      |
-| www_volume    | path as text | no  | {{volume}}/www    |                      |
-| log_folder    | path as text | no  | /var/log/letsencrypt |                   |
-| script_path          | path as text | no | /opt/letsencrypt         |                      |
-| sites                | array of `site` | no | []                     | list of your (sub-)domains you want to manage letsencrypt certificates |
-| force_cert_creation  | boolean         | no | yes                    | Try to create certificates instantly                                   |
+| letsencrypt_image_name    | text | no         | quay.io/letsencrypt/letsencrypt | Docker image name    |
+| letsencrypt_image_version | text | no         | latest                          | Docker image version |
+| letsencrypt_email         | text | yes        |                                 | Your e-mail address  |
+| letsencrypt_keysize       | text | no         | 4096                            |                      |
+| letsencrypt_config_volume | path as text | no  | {{letsencrypt_volume}}/config |                      |
+| letsencrypt_data_volume   | path as text | no  | {{letsencrypt_volume}}/data   |                      |
+| letsencrypt_www_volume    | path as text | no  | {{letsencrypt_volume}}/www    |                      |
+| letsencrypt_log_folder    | path as text | no  | /var/log/letsencrypt |                   |
+| letsencrypt_sites                | array of `site` | no | []                     | list of your (sub-)domains you want to manage letsencrypt certificates |
+| letsencrypt_force_cert_creation  | boolean         | no | yes                    | Try to create certificates instantly                                   |
 
 ### Definition of `site`
 
@@ -61,16 +60,16 @@ Typical playbook:
 
 ```yaml
     - role: install-letsencrypt
-      email: XXXX@gmail.com
-      keysize: 4096
-      www_volume: /srv/nginx/www
-      volume: /srv/letsencrypt
-      working_directory: /opt/letsencrypt
-      sites:
+      letsencrypt_email: XXXX@gmail.com
+      letsencrypt_keysize: 4096
+      letsencrypt_www_volume: /srv/nginx/www
+      letsencrypt_volume: /srv/letsencrypt
+      letsencrypt_working_directory: /opt/letsencrypt
+      letsencrypt_sites:
         - domain: git.myserver.org
         - domain: wiki.myserver.org
           dry_run: true
           test_cert: false
           ignore: true
-      force_cert_creation: true
+      letsencrypt_force_cert_creation: true
 ```

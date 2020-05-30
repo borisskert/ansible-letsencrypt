@@ -5,11 +5,11 @@
 
   roles:
     - role: ansible-letsencrypt
-      email: XXXX@gmail.com
-      volume: /srv/letsencrypt
-      sites:
+      letsencrypt_email: XXXX@gmail.com
+      letsencrypt_volume: /srv/letsencrypt
+      letsencrypt_sites:
         - domain: my.domain.one
           dry_run: true
           test_cert: false
           ignore: true
-      force_cert_creation: true
+      letsencrypt_force_cert_creation: true

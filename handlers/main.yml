@@ -1,7 +1,7 @@
 ---
 - name: Enable renew service
   systemd:
-    name: "{{ renew_service_name }}.service"
+    name: "{{ letsencrypt_renew_service_name }}.service"
     enabled: true
     daemon_reload: true
   when: not (
@@ -11,7 +11,7 @@
 
 - name: Enable renew timer
   systemd:
-    name: "{{ renew_service_name }}.timer"
+    name: "{{ letsencrypt_renew_service_name }}.timer"
     enabled: true
     daemon_reload: true
   when: not (
@@ -21,7 +21,7 @@
 
 - name: Start renew timer
   systemd:
-    name: "{{ renew_service_name }}.timer"
+    name: "{{ letsencrypt_renew_service_name }}.timer"
     state: started
     daemon_reload: true
   when: not (

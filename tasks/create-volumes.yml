@@ -1,7 +1,7 @@
 ---
 - name: create config directory
   file:
-    path: "{{ config_volume }}"
+    path: "{{ letsencrypt_config_volume }}"
     state: directory
     owner: root
     group: root
@@ -9,7 +9,7 @@
 
 - name: create data directory
   file:
-    path: "{{ data_volume }}"
+    path: "{{ letsencrypt_data_volume }}"
     state: directory
     owner: root
     group: root
@@ -17,7 +17,7 @@
 
 - name: create log directory
   file:
-    path: "{{ log_folder }}"
+    path: "{{ letsencrypt_log_folder }}"
     state: directory
     owner: root
     group: root

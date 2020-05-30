@@ -3,21 +3,21 @@
 
 - name: Pull image
   docker_image:
-    name: "{{ image_name }}:{{ image_version }}"
+    name: "{{ letsencrypt_image_name }}:{{ letsencrypt_image_version }}"
     source: pull
 
 - include: create-volumes.yml
 
 - name: Create working directory
   file:
-    path: "{{ working_directory }}"
+    path: "{{ letsencrypt_working_directory }}"
     state: directory
     mode: 0755
 
 - name: Create renew service
   template:
     src: systemd/letsencrypt.renew.service.j2
-    dest: "/etc/systemd/system/{{ renew_service_name }}.service"
+    dest: "/etc/systemd/system/{{ letsencrypt_renew_service_name }}.service"
     owner: root
     group: root
     mode: 0644
@@ -28,7 +28,7 @@
 - name: Create renew timer
   template:
     src: systemd/letsencrypt.renew.timer.j2
-    dest: "/etc/systemd/system/{{ renew_service_name }}.timer"
+    dest: "/etc/systemd/system/{{ letsencrypt_renew_service_name }}.timer"
     owner: root
     group: root
     mode: 0644
@@ -40,18 +40,18 @@
 - name: Setup logrotate config
   template:
     src: logrotate.j2
-    dest: "{{ logrotate_config }}"
+    dest: "{{ letsencrypt_logrotate_config }}"
 
 - include: create-certificate.yml site_name={{ item }}
-  with_items: "{{ sites }}"
-  when: force_cert_creation | bool
+  with_items: "{{ letsencrypt_sites }}"
+  when: letsencrypt_force_cert_creation | bool
 
 - name: Start systemd-managed services/timers
   meta: flush_handlers
 
 - name: Enable renew service (if not enabled)
   systemd:
-    name: "{{ renew_service_name }}.service"
+    name: "{{ letsencrypt_renew_service_name }}.service"
     enabled: true
   when: not (
     molecule_docker_environment is defined
@@ -60,7 +60,7 @@
 
 - name: Enable and start renew timer (if not enabled and started)
   systemd:
-    name: "{{ renew_service_name }}.timer"
+    name: "{{ letsencrypt_renew_service_name }}.timer"
     enabled: true
     state: started
   when: not (

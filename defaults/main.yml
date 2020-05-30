@@ -1,24 +1,24 @@
 ---
-image_name: certbot/certbot
-image_version: latest
+letsencrypt_image_name: certbot/certbot
+letsencrypt_image_version: latest
 
-email: ''
+letsencrypt_email: ''
 
-keysize: 4096
+letsencrypt_keysize: 4096
 
-working_directory: /opt/letsencrypt
-volume: ''
-www_volume: "{{volume}}/www"
-config_volume: "{{volume}}/config"
-data_volume: "{{volume}}/data"
-log_folder: /var/log/letsencrypt
+letsencrypt_working_directory: /opt/letsencrypt
+letsencrypt_volume: ''
+letsencrypt_www_volume: "{{letsencrypt_volume}}/www"
+letsencrypt_config_volume: "{{letsencrypt_volume}}/config"
+letsencrypt_data_volume: "{{letsencrypt_volume}}/data"
+letsencrypt_log_folder: /var/log/letsencrypt
 
-sites: []
+letsencrypt_sites: []
 
-force_cert_creation: true
+letsencrypt_force_cert_creation: true
 
 
-renew_service_name: letsencrypt.renew
-nginx_reload_service_name: nginx.reload
+letsencrypt_renew_service_name: letsencrypt.renew
+letsencrypt_nginx_reload_service_name: nginx.reload
 
-logrotate_config: /etc/logrotate.d/letsencrypt
+letsencrypt_logrotate_config: /etc/logrotate.d/letsencrypt

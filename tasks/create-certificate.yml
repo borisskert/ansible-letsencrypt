@@ -1,24 +1,24 @@
 ---
 - name: check certificate existence
   stat:
-    path: "{{ config_volume }}/live/{{ item.domain }}"
+    path: "{{ letsencrypt_config_volume }}/live/{{ item.domain }}"
   register: certificate
 
 - name: Create production certificate
   command: |
     docker run --rm --name letsencrypt_create_cert \
-      --volume "{{ config_volume }}:/etc/letsencrypt" \
-      --volume "{{ data_volume }}:/var/lib/letsencrypt" \
-      --volume "{{ www_volume }}:/www" \
-      --volume "{{ log_folder }}:/var/log/letsencrypt" \
-      {{ image_name }}:{{ image_version }} \
+      --volume "{{ letsencrypt_config_volume }}:/etc/letsencrypt" \
+      --volume "{{ letsencrypt_data_volume }}:/var/lib/letsencrypt" \
+      --volume "{{ letsencrypt_www_volume }}:/www" \
+      --volume "{{ letsencrypt_log_folder }}:/var/log/letsencrypt" \
+      {{ letsencrypt_image_name }}:{{ letsencrypt_image_version }} \
         auth \
         -a webroot \
         --webroot-path=/www \
         --non-interactive \
-        --email {{ email }} \
+        --email {{ letsencrypt_email }} \
         --agree-tos \
-        --rsa-key-size {{ keysize }} \
+        --rsa-key-size {{ letsencrypt_keysize }} \
         -d {{ item.domain }}
   when: not certificate.stat.exists
     and not (
@@ -35,18 +35,18 @@
 - name: Create test certificate
   command: |
     docker run --rm --name letsencrypt_create_cert \
-      --volume "{{ config_volume }}:/etc/letsencrypt" \
-      --volume "{{ data_volume }}:/var/lib/letsencrypt" \
-      --volume "{{ www_volume }}:/www" \
-      --volume "{{ log_folder }}:/var/log/letsencrypt" \
-      {{ image_name }}:{{ image_version }} \
+      --volume "{{ letsencrypt_config_volume }}:/etc/letsencrypt" \
+      --volume "{{ letsencrypt_data_volume }}:/var/lib/letsencrypt" \
+      --volume "{{ letsencrypt_www_volume }}:/www" \
+      --volume "{{ letsencrypt_log_folder }}:/var/log/letsencrypt" \
+      {{ letsencrypt_image_name }}:{{ letsencrypt_image_version }} \
         auth \
         -a webroot \
         --webroot-path=/www \
         --non-interactive \
-        --email {{ email }} \
+        --email {{ letsencrypt_email }} \
         --agree-tos \
-        --rsa-key-size {{ keysize }} \
+        --rsa-key-size {{ letsencrypt_keysize }} \
         --test-cert \
         -d {{ item.domain }}
   when: not certificate.stat.exists
@@ -64,18 +64,18 @@
 - name: Create dry-run certificate
   command: |
     docker run --rm --name letsencrypt_create_cert \
-      --volume "{{ config_volume }}:/etc/letsencrypt" \
-      --volume "{{ data_volume }}:/var/lib/letsencrypt" \
-      --volume "{{ www_volume }}:/www" \
-      --volume "{{ log_folder }}:/var/log/letsencrypt" \
-      {{ image_name }}:{{ image_version }} \
+      --volume "{{ letsencrypt_config_volume }}:/etc/letsencrypt" \
+      --volume "{{ letsencrypt_data_volume }}:/var/lib/letsencrypt" \
+      --volume "{{ letsencrypt_www_volume }}:/www" \
+      --volume "{{ letsencrypt_log_folder }}:/var/log/letsencrypt" \
+      {{ letsencrypt_image_name }}:{{ letsencrypt_image_version }} \
         certonly \
         -a webroot \
         --webroot-path=/www \
         --non-interactive \
-        --email {{ email }} \
+        --email {{ letsencrypt_email }} \
         --agree-tos \
-        --rsa-key-size {{ keysize }} \
+        --rsa-key-size {{ letsencrypt_keysize }} \
         --dry-run \
         -d {{ item.domain }}
   when: not certificate.stat.exists
