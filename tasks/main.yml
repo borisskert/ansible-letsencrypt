@@ -1,12 +1,7 @@
 ---
-- include: check-parameters.yml
+- include_tasks: check-parameters.yml
 
-- name: Pull image
-  docker_image:
-    name: "{{ letsencrypt_image_name }}:{{ letsencrypt_image_version }}"
-    source: pull
-
-- include: create-volumes.yml
+- include_tasks: create-volumes.yml
 
 - name: Create working directory
   file:
@@ -42,7 +37,7 @@
     src: logrotate.j2
     dest: "{{ letsencrypt_logrotate_config }}"
 
-- include: create-certificate.yml site_name={{ item }}
+- include_tasks: create-certificate.yml
   with_items: "{{ letsencrypt_sites }}"
   when: letsencrypt_force_cert_creation | bool
 

@@ -4,13 +4,6 @@
   become: true
 
   tasks:
-    - name: Should have pulled image
-      docker_image:
-        name: certbot/certbot:latest
-        source: pull
-      register: docker_image
-      failed_when: docker_image.changed
-
     - name: Should have created volume
       file:
         path: /srv/letsencrypt
@@ -18,9 +11,36 @@
       register: volume
       failed_when: volume.changed
 
-  post_tasks:
-    - name: Delete docker image
-      docker_image:
-        name: certbot/certbot:latest
-        state: absent
-      failed_when: false
+    - name: Should have created renew service
+      slurp:
+        src: /etc/systemd/system/letsencrypt.renew.service
+      register: renew_service
+      failed_when:
+        not renew_service.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          [Unit]
+          Description = letsencrypt certificate renew service
+          
+          [Service]
+          ExecStartPre = -/usr/bin/docker pull certbot/certbot:latest
+          
+          ExecStart = /usr/bin/docker run \
+                                      --rm \
+                                      --name letsencrypt \
+                                      --volume "/srv/letsencrypt/config:/etc/letsencrypt" \
+                                      --volume "/srv/letsencrypt/data:/var/lib/letsencrypt" \
+                                      --volume "/srv/letsencrypt/www:/www" \
+                                      --volume "/var/log/letsencrypt:/var/log/letsencrypt" \
+                                      certbot/certbot:latest \
+                                      renew -a webroot \
+                                            --webroot-path=/www \
+                                            --non-interactive \
+                                            --email XXXX@gmail.com \
+                                            --agree-tos \
+                                            --rsa-key-size 4096
+          
+          ExecStopPost  = -/bin/systemctl start nginx.reload
+          
+          Restart = no
+          TimeoutSec = 3600
