@@ -62,3 +62,18 @@
           
           [Install]
           WantedBy=timers.target
+
+    - name: Should have created logrotate config
+      slurp:
+        src: /etc/logrotate.d/letsencrypt
+      register: logrotate_config
+      failed_when:
+        not logrotate_config.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          /var/log/letsencrypt/*.log {
+          	rotate 8
+          	weekly
+          	compress
+          	missingok
+          }
