@@ -10,18 +10,18 @@ driver:
     name: virtualbox
 
 platforms:
-  - name: ansible-borgbackup-xenial
-    box: ubuntu/xenial64
-  - name: ansible-borgbackup-bionic
-    box: ubuntu/bionic64
-  - name: ansible-borgbackup-focal
-    box: ubuntu/focal64
-  - name: ansible-borgbackup-stretch
-    box: debian/stretch64
+  - name: ansible-letsencrypt-noble
+    box: cloud-image/ubuntu-24.04
+  - name: ansible-letsencrypt-jammy
+    box: cloud-image/ubuntu-22.04
+  - name: ansible-letsencrypt-focal
+    box: cloud-image/ubuntu-20.04
+  - name: ansible-letsencrypt-bookworm
+    box: cloud-image/debian-12
     groups:
       - debian
-  - name: ansible-borgbackup-buster
-    box: debian/buster64
+  - name: ansible-letsencrypt-bullseye
+    box: cloud-image/debian-11
     groups:
       - debian
 
