@@ -44,3 +44,21 @@
           
           Restart = no
           TimeoutSec = 3600
+
+    - name: Should have created renew timer
+      slurp:
+        src: /etc/systemd/system/letsencrypt.renew.timer
+      register: renew_timer
+      failed_when:
+        not renew_timer.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          [Unit]
+          Description=Run daily letsencrypt renew
+          
+          [Timer]
+          OnCalendar = daily
+          Persistent=true
+          
+          [Install]
+          WantedBy=timers.target
