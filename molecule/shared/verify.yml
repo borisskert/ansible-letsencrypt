@@ -4,6 +4,13 @@
   become: true
 
   tasks:
+    - name: Should have created working directory
+      file:
+        path: /opt/letsencrypt
+        state: directory
+      register: working_directory
+      failed_when: working_directory.changed
+
     - name: Should have created volume
       file:
         path: /srv/letsencrypt
